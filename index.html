@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>For My Love ❤️</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(120deg, #ff9a9e, #fad0c4, #a18cd1);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+  }
+
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 0.2em;
+    text-shadow: 2px 2px 5px #000;
+  }
+
+  .heart {
+    font-size: 5em;
+    animation: heartbeat 1s infinite;
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+  }
+
+  .lyrics {
+    font-size: 1.5em;
+    margin: 20px;
+    max-width: 600px;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  button {
+    background: #fff;
+    color: #ff6b81;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-top: 20px;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+</style>
+</head>
+<body>
+
+<h1>To My Amazing Girlfriend ❤️</h1>
+<div class="lyrics" id="lyrics">Click play to start our song...</div>
+
+<audio id="song" src="nothingcutversion.mp3"></audio>
+
+<button onclick="startLove()">Click Me 💖</button>
+
+<script>
+const lyricsData = [
+    {time: 0, text: "Dumb conversations"},
+    {time: 2, text: "We lose track of time"},
+    {time: 4.5, text: "Have I told you lately"},
+    {time: 7, text: "I'm grateful you're mine?"},
+    {time: 9.5, text: "We'll watch 'The Notebook'"},
+    {time: 12, text: "For the seventeenth time"},
+    {time: 14.5, text: "I'll say, it's stupid"},
+    {time: 17, text: "Then you'll catch me crying"},
+    {time: 20.9, text: "We're not making out"},
+    {time: 22, text: "On a boat in the rain"},
+    {time: 26, text: "Or in a house I've painted blue"},
+    {time: 30.2, text: "But there's nothing"},
+    {time: 32.5, text: "Like doing nothing"},
+    {time: 35.2, text: "With you"}
+];
+
+const lyricsDiv = document.getElementById('lyrics');
+const song = document.getElementById('song');
+let currentLyricIndex = -1;
+let buttonShown = false;
+
+function startLove() {
+    song.volume = 1; // start at normal volume
+    song.play();
+    startHearts();
+    showLyricsSync();
+}
+
+function showLyricsSync() {
+    song.addEventListener('timeupdate', () => {
+        const currentTime = song.currentTime;
+        let newIndex = lyricsData.length - 1;
+        for(let i = 0; i < lyricsData.length; i++){
+            if(currentTime < lyricsData[i].time){
+                newIndex = i - 1;
+                break;
+            }
+        }
+
+        if(newIndex !== currentLyricIndex && newIndex >= 0){
+            currentLyricIndex = newIndex;
+            lyricsDiv.style.opacity = 0;
+            setTimeout(() => {
+                lyricsDiv.textContent = lyricsData[currentLyricIndex].text;
+                lyricsDiv.style.opacity = 1;
+            }, 300);
+        }
+
+        // After last lyric, show button
+        if(currentLyricIndex === lyricsData.length - 1 && !buttonShown){
+            buttonShown = true;
+            setTimeout(() => {
+                song.volume = 0.2; // reduce volume for looping
+                song.loop = true;
+                showButton();
+            }, 1500);
+        }
+    });
+}
+
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = '💗';
+        heart.style.left = (Math.random() * (window.innerWidth - 50)) + 'px';
+        heart.style.top = window.innerHeight + 50 + 'px';
+        heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+        document.body.appendChild(heart);
+
+        let top = window.innerHeight + 50;
+        let left = parseFloat(heart.style.left);
+        const drift = (Math.random() - 0.5) * 1.5;
+
+        const floatInterval = setInterval(() => {
+            top -= 1.5;
+            left += drift;
+            heart.style.top = top + 'px';
+            heart.style.left = left + 'px';
+            if(top < -50){
+                clearInterval(floatInterval);
+                heart.remove();
+            }
+        }, 30);
+    }, 700);
+}
+
+function showButton() {
+    const buttonDiv = document.createElement('div');
+    buttonDiv.style.position = 'absolute';
+    buttonDiv.style.top = '50%';
+    buttonDiv.style.left = '50%';
+    buttonDiv.style.transform = 'translate(-50%, -50%)';
+    buttonDiv.style.textAlign = 'center';
+    buttonDiv.style.opacity = 0;
+    buttonDiv.style.transition = 'opacity 2s';
+
+    buttonDiv.innerHTML = `
+        <button id="envelopeBtn">Open My Love Letter 💌</button>
+    `;
+
+    document.body.appendChild(buttonDiv);
+
+    // Fade in the button
+    setTimeout(() => {
+        buttonDiv.style.opacity = 1;
+    }, 100);
+
+    // Navigate to envelope.html on click
+    const envelopeBtn = document.getElementById('envelopeBtn');
+    envelopeBtn.onclick = () => {
+        window.location.href = 'envelope.html';
+    };
+}
+</script>
+
+</body>
+</html>
